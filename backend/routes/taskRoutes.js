@@ -2,7 +2,7 @@ import express from "express";
 import { Task } from "../models/taskModel.js";
 const router = express.Router();
 
-// Route for saving a new task
+// Route for creating a new task
 router.post('/', async (request, response) => {
     try {
         const { taskName, priority, label } = request.body;
@@ -19,11 +19,14 @@ router.post('/', async (request, response) => {
 
         const task = await Task.create(newTask);
 
+        return response.status(201).json({ message: 'Task created successfully', data: task });
+
     } catch (error) {
         console.log(error.message);
         response.status(500).json({ error: error.message });
     }
 });
+
 
 // Route for getting all 
 router.get('/', async (request, response) => {
@@ -43,8 +46,8 @@ router.get('/', async (request, response) => {
 router.get('/:id', async (request, response) => {
     try {
         const { id } = request.params;
-
-        const task = await Task.findById({ id });
+        const task = await Task.findById(id);
+        
         return response.status(200).json(task);
 
     } catch (error) {
@@ -81,12 +84,6 @@ router.put('/:id', async (request, response) => {
 // Route for deleting a task
 router.delete('/:id', async (request, response) => {
     try {
-        const { taskName, priority, label } = request.body;
-
-        if (!taskName) {
-            return response.status(400).json({ message: "Task field is required" });
-        }
-
         const { id } = request.params;
 
         const result = await Task.findByIdAndDelete(id);
