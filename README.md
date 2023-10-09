@@ -4,11 +4,12 @@ A To-do List application built using the MERN (MongoDB, Express.js, React.js, No
 
 ## Features
 
-- **Viewing tasks** - tasks are shown to the user in a responsive and easy to understand interface, with the task name, label (stylised as a hashtag) and task priority respectively
-- **Add new tasks**
-- **Delete tasks** - users can delete specific tasks by clicking on the trash can icon.
-- **Edit tasks** - 
-- **Task completion** - clicking the checkbox allows the user to remove a 
+- **Viewing tasks**
+- **Add new tasks** 
+- **Delete tasks**
+- **Edit tasks** 
+- **Task completion** 
+- **Task filtering**
 
 ## Technologies Used
 
@@ -79,3 +80,4 @@ npm run dev
 2. Create a task by pressing the Add a new Task button and filling in all the required fields.
 3. Edit or delete an existing task by pressing the relating icons.
 4. Mark a task as completed or incomplete by checking or unchecking the tick-box.
+5. Filter a task by pressing on it's label
