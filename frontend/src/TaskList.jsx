@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TaskModal from './TaskModal';
 import EditTaskModal from './EditTaskModal';
 import { FaRegTrashAlt, FaEdit } from 'react-icons/fa';
+import { AiOutlineClose } from 'react-icons/ai'
 
 
 const TaskList = () => {
@@ -10,17 +11,6 @@ const TaskList = () => {
     const [editTask, setEditTask] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedLabel, setSelectedLabel] = useState(null);
-    const [selectedPriority, setSelectedPriority] = useState(null);
-
-    const handleLabelClick = (label) => {
-        setSelectedLabel(label);
-        setSelectedPriority(null);
-    }
-
-    const handlePriorityClick= (label) => {
-        setSelectedPriority(priority);
-        setSelectedLabel(null);
-    }
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -129,6 +119,18 @@ const TaskList = () => {
         }
     };
 
+    const handleLabelClick = (label) => {
+        setSelectedLabel(label);
+    }
+
+    const handleClearLabel = () => {
+        setSelectedLabel(null);
+    }
+
+    const filteredTasks = selectedLabel
+        ? tasks.filter(task => task.label === selectedLabel)
+        : tasks;
+
     const getPriorityColorClass = (priority) => {
         switch (priority) {
             case 'high':
@@ -144,11 +146,23 @@ const TaskList = () => {
 
 
     return (
-        <div className="mx-auto  p-4 bg-white">
-            <h1 className="text-2xl font-bold mb-4">Task List</h1>
+        <div className="mx-auto p-4 bg-white">
+            <div className="flex items-center mb-4">
+                <h1 className="text-2xl font-bold">Task List</h1>
+
+                {selectedLabel && (
+                    <div className="ml-2 flex items-center">
+                        <div className={`bg-orange-500 text-white py-1 px-2 rounded-full mr-2 flex items-center`}>
+                            <div className="font-semibold">#{selectedLabel}</div>
+                            <button onClick={handleClearLabel} className="ml-1">
+                                <AiOutlineClose />
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
             <ul>
-                
-                {tasks.map(task => (
+                {filteredTasks.map(task => (
                     <li key={task._id} className="flex justify-between items-center border-b py-2">
                         <div className="flex items-center">
                             <input
@@ -158,7 +172,11 @@ const TaskList = () => {
                             />
                             <span className={`ml-2 ${task.isComplete ? 'line-through text-gray-400' : ''}`}>
                                 {task.taskName}
-                                <span className="text-orange-500 ml-1">
+                                <span
+                                    className="text-orange-500 ml-1"
+                                    onClick={() => handleLabelClick(task.label)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     #{task.label}
                                 </span>
                             </span>
@@ -174,22 +192,21 @@ const TaskList = () => {
                                 <FaRegTrashAlt onClick={() => handleDelete(task._id)} />
                             </button>
                         </div>
-
                     </li>
                 ))}
-
-
-
             </ul>
             <button
                 className="block mx-auto mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
                 onClick={openModal}
-            > Add a new Task </button>
+            >
+                Add a new Task
+            </button>
             {isModalOpen && (
                 <TaskModal
                     isOpen={isModalOpen}
                     closeModal={closeModal}
-                    handleCreateTask={handleCreateTask} />
+                    handleCreateTask={handleCreateTask}
+                />
             )}
             {isEditModalOpen && (
                 <EditTaskModal
@@ -199,7 +216,6 @@ const TaskList = () => {
                     editTask={editTask}
                 />
             )}
-
         </div>
     );
 };
