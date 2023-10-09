@@ -20,7 +20,7 @@ app.get('/', (request, response) => {
 app.use('/tasks', taskRoutes);
 
 mongoose
-    .connect(process.env.mongodburl)
+    .connect(process.env.MONGODB_URL)
     .then(() => {
         console.log('Connected to database');
         app.listen(PORT, () => {
